@@ -22,14 +22,25 @@ async function onSearch(e) {
   clearGallery();
   newPixabayApi.resetPage();
 
-  newPixabayApi.searchQuery = e.target.searchQuery.value;
+  newPixabayApi.searchQuery = e.target.searchQuery.value.trim();
+  if (!newPixabayApi.searchQuery) {
+    return;
+  }
 
   const image = await newPixabayApi.fetchPixabay();
+
   const images = image.hits;
   addImageToGallery(images);
 
   const totalHits = image.totalHits;
-  Notiflix.Notify.success('Hooray! We found ' + `${totalHits}` + ' images.');
+
+  if (totalHits === 0) {
+    return Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+  } else {
+    Notiflix.Notify.success('Hooray! We found ' + `${totalHits}` + ' images.');
+  }
 }
 
 function addImageToGallery(images) {
@@ -53,10 +64,10 @@ function addImageToGallery(images) {
               </a>
             </div>
             <div class="info">
-              <div class="info-item"><b>Likes</b><p class="info-value">${likes}</p></div>
-              <div class="info-item"><b>Views</b><p class="info-value">${views}</p></div>
-              <div class="info-item"><b>Comments</b><p class="info-value">${comments}</p></div>
-              <div class="info-item"><b>Downloads</b><p class="info-value">${downloads}</p></div>
+              <div class="info-item"><b>Likes</b><p>${likes}</p></div>
+              <div class="info-item"><b>Views</b><p>${views}</p></div>
+              <div class="info-item"><b>Comments</b><p>${comments}</p></div>
+              <div class="info-item"><b>Downloads</b><p>${downloads}</p></div>
             </div>
           </div>`
       )

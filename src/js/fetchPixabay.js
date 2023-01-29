@@ -23,11 +23,7 @@ export default class PixabayApi {
 
     const response = await axios.get(URL, { params: options });
 
-    if (response.data.totalHits === 0) {
-      return Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-    } else if (response.data.totalHits < options.per_page * `${this.page}`) {
+    if (response.data.totalHits < options.per_page * `${this.page}`) {
       return Notiflix.Notify.failure(
         "We're sorry, but you've reached the end of search results."
       );
