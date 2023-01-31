@@ -22,8 +22,10 @@ async function onSearch(e) {
   clearGallery();
   newPixabayApi.resetPage();
 
-  newPixabayApi.searchQuery = e.target.searchQuery.value.trim();
-  if (!newPixabayApi.searchQuery) {
+  const query = e.target.searchQuery.value.trim();
+  newPixabayApi.searchQuery = query;
+  if (!query) {
+    clearGallery();
     return;
   }
 
@@ -34,13 +36,7 @@ async function onSearch(e) {
 
   const totalHits = image.totalHits;
 
-  if (totalHits === 0) {
-    return Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-  } else {
-    Notiflix.Notify.success('Hooray! We found ' + `${totalHits}` + ' images.');
-  }
+  Notiflix.Notify.success('Hooray! We found ' + `${totalHits}` + ' images.');
 }
 
 function addImageToGallery(images) {
