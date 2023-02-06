@@ -22,21 +22,18 @@ async function onSearch(e) {
   clearGallery();
   newPixabayApi.resetPage();
 
-  const query = e.target.searchQuery.value.trim();
-  newPixabayApi.searchQuery = query;
-  if (!query) {
-    clearGallery();
+  newPixabayApi.searchQuery = e.currentTarget.elements.searchQuery.value.trim();
+
+  if (newPixabayApi.searchQuery === '') {
     return;
   }
 
   const image = await newPixabayApi.fetchPixabay();
-
   const images = image.hits;
   addImageToGallery(images);
-
-  const totalHits = image.totalHits;
-
-  Notiflix.Notify.success('Hooray! We found ' + `${totalHits}` + ' images.');
+  Notiflix.Notify.success(
+    'Hooray! We found ' + `${image.totalHits}` + ' images.'
+  );
 }
 
 function addImageToGallery(images) {
